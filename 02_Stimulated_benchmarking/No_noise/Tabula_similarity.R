@@ -2,6 +2,8 @@
 
 ####RMSE vs similarity####
 
+library(cellGeometry)
+
 metric_percent <- readRDS("tabula_metric_percent.rds")
 
 mk <- readRDS("tabula_markers_dualmeans_rerun.rds")
@@ -21,6 +23,8 @@ similarity_out <- function(mk, data){
 }
 
 cs_df <- similarity_out(tabula_mkv2, "Tabula Sapiens")
+
+library(dplyr)
 
 metric_mean <- metric_percent %>% group_by(Cluster, Method) %>%
   summarise(RMSE_mean = mean(RMSE),
