@@ -54,7 +54,7 @@ This repository contains scripts for the cellGeometry manuscript
 
 ```
 
-Data availability 
+## Data availability 
 
 * Single-cell datasets for AMP phase 1 synovium are available from ImmPort accession code [SDY998](https://www.immport.org/shared/study/SDY998). 
 
@@ -64,4 +64,4 @@ Data availability
 
 * Single-cell datasets for the Human Brain Cell Atlas is available from [https://cellxgene.cziscience.com/collections/283d65eb-dd53-496d-adb7-7570c7caa443](https://cellxgene.cziscience.com/collections/283d65eb-dd53-496d-adb7-7570c7caa443)
 
-* The PEAC RA blood and synovium bulk RNA-Seq datasets, R4RA and STRAP bulk RA synovium RNA-Seq datasets are available from ArrayExpress under accession codes E-MTAB-6141, E-MTAB-11611 and E-MTAB-13733.
+* The PEAC RA blood and synovium bulk RNA-Seq datasets, R4RA and STRAP bulk RA synovium RNA-Seq datasets are available from ArrayExpress under accession codes [E-MTAB-6141](https://www.ebi.ac.uk/biostudies/ArrayExpress/studies/E-MTAB-6141), [E-MTAB-11611](https://www.ebi.ac.uk/biostudies/ArrayExpress/studies/E-MTAB-11611) and [E-MTAB-13733](https://www.ebi.ac.uk/biostudies/ArrayExpress/studies/E-MTAB-13733).
