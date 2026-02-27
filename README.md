@@ -25,12 +25,20 @@ This repository contains scripts for the cellGeometry manuscript
 │   │   ├── celltypist_NMF.R
 │   │   ├── combined_metric_plot.R
 │   │   ├── combined_NMF_metric_plot.R
+│   │   ├── glmnet.R
+│   │   ├── LinDeconSeq_reprex
+│   │   │   ├── Brain_LinDeconSeq.R
+│   │   │   └── Tabula_LinDeconSeq.R
+│   │   ├── nnls_glmnet_metric_plot.R
+│   │   ├── NNLS.R
 │   │   ├── specificity_plot.R
 │   │   ├── Tabula_cs.R
 │   │   ├── Tabula_dirichlet_plot.R
 │   │   ├── Tabula_dirichlet.R
 │   │   ├── Tabula_NMF.R
-│   │   └── Tabula_similarity.R
+│   │   ├── Tabula_similarity.R
+│   │   ├── zero_fraction_plot.R
+│   │   └── zero_fraction.R
 │   └── With_noise
 │       ├── AMP_dirichlet_noise_lin_Music.R
 │       ├── AMP_dirichlet_noise_plot.R
