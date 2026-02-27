@@ -149,7 +149,7 @@ arrange_data <- function(df, value, method){
   test$Method <- method
   test$Group <- cell_groups$Group[match(test$Cluster,
                                         rownames(cell_groups))]
-  filter <- c("erythrocyte", "platelet", "basophil", "neutrophil")
+  filter <- c("basophil", "neutrophil")
   test$Cluster[test$Cluster %in% filter] <- stringr::str_to_sentence(test$Cluster[test$Cluster %in% filter])
   #test$Cluster <- factor(test$Cluster, levels = col_order)
   test
@@ -387,9 +387,9 @@ lym_plot <- function(df, groups = c("ILC", "B cells", "T cells"), method, param 
   sub <- df[df$Group %in% groups & df$Method == method, ]
   sub$Param <- sub[ , param]
   
-  sum <- sub %>% 
+  sum <- as.data.frame(sub %>% 
     group_by(Patient) %>%
-    summarise("Sum" = sum(Param))
+    summarise("Sum" = sum(Param, na.rm = TRUE)))
   
   sum$lymphocytes <- sub$lymphocytes[match(sum$Patient,
                                            sub$Patient)]
@@ -417,6 +417,11 @@ lym_plot <- function(df, groups = c("ILC", "B cells", "T cells"), method, param 
           plot.margin = margin(c(0.1, 0.5, 0.1, 0.1), unit = "cm"))
 }
 
+cellgeo_nest_percent <- as.data.frame(cellgeo$nest_percent)
+cellgeo_nest_percent_long <- arrange_data(cellgeo_nest_percent, "Percentage", "CellGeometry")
+cellgeo_nest_percent_long <- add_data(cellgeo_nest_percent_long)
+cellgeo_nest_percent_long$Method <- "CellGeometry"
+
 cellgeo_plot <- list()
 cellgeo_plot[["1"]] <- lym_plot(cellgeo_nest_percent_long, method = "CellGeometry") +
   scale_x_continuous(breaks = c(1, 2, 3))
@@ -429,7 +434,7 @@ plotlist <- lapply(c("MuSiC", "DWLS", "LinDeconSeq"), function(x){
 plotlist <- c(cellgeo_plot,
               plotlist)
 
-pdf("PEAC_lymphocytes_method.pdf", width = 8.2, height = 2)
+pdf("PEAC_lymphocytes_method_CORRECT.pdf", width = 8.2, height = 2)
 ggarrange(plotlist = plotlist, ncol = 4, nrow = 1)
 dev.off()
 

@@ -100,7 +100,6 @@ geo_output <- function(times, rep){
                      count_space = T, convert_bulk = F, 
                      use_filter = FALSE,
                      weight_method = "equal")
-  #original use_filter = T
   toc(log = TRUE)
   mk_time <- as.numeric(gsub(" sec.*", "", unlist(tic.log(format = TRUE))))
   tic.clearlog() 

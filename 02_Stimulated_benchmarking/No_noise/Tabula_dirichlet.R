@@ -78,8 +78,7 @@ cellgeo_tune_eq <- tune_deconv(mkv2,  sim_sampled$`Times 3`$`Rep 1`,
                                output = "percent",
                                metric = "RMSE",
                                arith_mean = T,
-                               count_space = T, convert_bulk = F, weight_method = "equal",
-                               cores = 8)
+                               count_space = T, convert_bulk = F, weight_method = "equal")
 # Best tune:
 #   nsubclass  expfilter  use_filter  mean.RMSE
 # 500        0.5       FALSE    0.04986
@@ -94,10 +93,7 @@ geo_output <- function(times, rep){
                      arith_mean = T,
                      count_space = T, convert_bulk = F, 
                      use_filter = FALSE, 
-                     #cores = 1,
-                     cores = 8,
                      weight_method = "equal")
-  #original use_filter = T
   toc(log = TRUE)
   mk_time <- as.numeric(gsub(" sec.*", "", unlist(tic.log(format = TRUE))))
   tic.clearlog() 
@@ -119,8 +115,7 @@ for(x in paste("Rep", 1:5)){
                                           rep = as.numeric(gsub("Rep ", "", x)))
 }
 
-# saveRDS(cellgeo, file = "cellgeo_dirichlet_output_500.rds") # 1 core
-# saveRDS(cellgeo, file = "cellgeo_dirichlet_output_500_8cores.rds")
+# saveRDS(cellgeo, file = "cellgeo_dirichlet_output_500.rds")
 
 tic()
 mk_update <- updateMarkers(mk, nsubclass = 200, expfilter = 0.5)
@@ -130,15 +125,6 @@ tic.clearlog()
 mk_update$mk_time <- mk_time
 
 # saveRDS(mk_update, "tabula_markers_dualmeans_rerun_update.rds")
-
-cellgeo <- list()
-
-for(x in paste("Rep", 1:5)){
-  cellgeo[["Times 3"]][[x]] <- geo_output(times = 3,
-                                          rep = as.numeric(gsub("Rep ", "", x)))
-}
-
-# saveRDS(cellgeo, file = "cellgeo_dirichlet_output_200_8cores_rerun.rds")
 
 ####MuSiC####
 

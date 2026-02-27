@@ -83,6 +83,9 @@ highlight <- c("CD4 T cell",
                "intermediate monocyte",
                "classical monocyte")
 
+library(cellGeometry)
+library(ComplexHeatmap)
+
 cs_plot <- function(nsub){
   mk <- updateMarkers(mk, nsubclass = nsub)
   

@@ -138,7 +138,7 @@ res <- tune_deconv(mkm, sim_sampled_merge$`Times 1`$`Rep 1`, sim_counts_merge,
                                expfilter = c(0, 0.05, 0.1, 0.2, 0.5, 1),
                                weight_method = c("none", "equal")),
                    arith_mean = T, count_space = T, convert_bulk = F,
-                   use_filter = F, cores = 8)
+                   use_filter = F)
 
 # Best tune:
 # nsubclass  expfilter  weight_method  mean.RMSE
@@ -156,9 +156,7 @@ geo_output <- function(times, rep){
                      arith_mean = T,
                      count_space = T, convert_bulk = F, 
                      use_filter = FALSE,
-                     weight_method = "equal",
-                     cores = 8)
-  #original use_filter = T
+                     weight_method = "equal")
   toc(log = TRUE)
   mk_time <- as.numeric(gsub(" sec.*", "", unlist(tic.log(format = TRUE))))
   tic.clearlog() 

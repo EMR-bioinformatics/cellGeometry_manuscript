@@ -55,7 +55,7 @@ rownames(sim_sampled) <- gene2symbol(rownames(sim_sampled), ensDb_v110)
 
 
 fit2 <- deconvolute(mk, sim_sampled,
-                    arith_mean = T, use_filter = F, cores = 12)
+                    arith_mean = T, use_filter = F)
 
 plot_set(sim_counts, fit2$subclass$output, show_zero = T, show_identity = T)
 mset <- metric_set(sim_percent, fit2$subclass$percent)
@@ -94,7 +94,7 @@ noise_check <- function(noiseFUN, noise_set, reps = 3) {
     out <- vapply(1:reps, function(j) {
       sim_noise <- do.call(noiseFUN, list(counts = sim_sampled, sd = noi))
       fit2 <- deconvolute(mk, sim_noise,
-                          arith_mean = T, use_filter = F, comp_amount = 1, cores = 16)
+                          arith_mean = T, use_filter = F, comp_amount = 1)
       err <- fit2$subclass$output - sim_counts
       rmse <- sqrt(colMeans(err^2))
       vapply(1:6, function(i) {

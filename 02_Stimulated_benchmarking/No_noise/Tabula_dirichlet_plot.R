@@ -293,5 +293,9 @@ plot_setv2(sim_percent[ , 91:135], music_percent[ , 91:135], show_zero = TRUE,
 plot_setv2(sim_percent[ , 136:171], music_percent[ , 136:171], show_zero = TRUE,
            show_identity = TRUE, mfrow = c(9,5))
 
+# alternative
 
+plot_pred(sim_percent, cellgeo$`Times 3`$`Rep 1`$output$subclass$percent, mk) + labs(x = "Observed (%)", y = "Predicted (%)")
+
+plot_pred(sim_percent, as.matrix(music_percent), mk, ellipse = 3) + labs(x = "Observed (%)", y = "Predicted (%)")
 

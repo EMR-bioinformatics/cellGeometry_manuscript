@@ -57,7 +57,7 @@ sim_sampled <- simulate_bulk(mat, sim_counts, subcl, times = 1,
                              method = "dirichlet")
 rownames(sim_sampled) <- gene2symbol(rownames(sim_sampled), ensDb_v110)
 
-fit0 <- deconvolute(mk, sim_sampled, arith_mean = T, use_filter = F, cores = 8, npass = 2)
+fit0 <- deconvolute(mk, sim_sampled, arith_mean = T, use_filter = F, npass = 2)
 hist(scale(log2(fit0$subclass$var.e +1)))
 
 barplot(sort(fit0$subclass$se), horiz = T, las = 1, cex.names = 0.5)
@@ -77,25 +77,25 @@ mk <- updateMarkers(mk, bulkdata = PEAC.blood, nsubclass = 500,
 # from nsubclass 29 to 30
 barplot(sort(mk$genemeans["HBB",]), horiz = T, las = 1)
 
-fit <- deconvolute(mk, PEAC.blood, cores = 8, npass = 1)
-fit <- deconvolute(mk, PEAC.blood, cores = 8, npass = 2)
-fit <- deconvolute(mk, PEAC.blood, cores = 8, npass = 5)
+fit <- deconvolute(mk, PEAC.blood, npass = 1)
+fit <- deconvolute(mk, PEAC.blood, npass = 2)
+fit <- deconvolute(mk, PEAC.blood, npass = 5)
 
 # test multipass options
-fit <- deconvolute(mk, PEAC.blood, cores = 8, npass = 5, outlier_cutoff = 3)
+fit <- deconvolute(mk, PEAC.blood, npass = 5, outlier_cutoff = 3)
 
-fit <- deconvolute(mk, PEAC.blood, cores = 8, npass = 3,
+fit <- deconvolute(mk, PEAC.blood, npass = 3,
                    outlier_method = "cooks", outlier_cutoff = 0.5,
                    outlier_quantile = 0.9)
-fit <- deconvolute(mk, PEAC.blood, cores = 8, npass = 5,
+fit <- deconvolute(mk, PEAC.blood, npass = 5,
                    outlier_method = "rstud", outlier_cutoff = 4,
                    outlier_quantile = 0.9)
 
 barplot(sqrt(sort(fit$subclass$var.e, decreasing = T)[1:10]))
 
-fit0 <- deconvolute(mk, sim_sampled, arith_mean = T, use_filter = F, cores = 8,
+fit0 <- deconvolute(mk, sim_sampled, arith_mean = T, use_filter = F, 
                     npass = 1)
-fit0 <- deconvolute(mk, sim_sampled, arith_mean = T, use_filter = F, cores = 8,
+fit0 <- deconvolute(mk, sim_sampled, arith_mean = T, use_filter = F, 
                     npass = 5, outlier_method = "rstud")
 
 hist(fit$subclass$se)
@@ -138,7 +138,7 @@ plot(scale(log2(fit0$subclass$var.e)), rowMeans(abs(rstud)))
 # simulation
 
 mk <- updateMarkers(mk, nsubclass = 25)
-fit0 <- deconvolute(mk, sim_sampled, arith_mean = T, use_filter = F, cores = 8, npass = 2)
+fit0 <- deconvolute(mk, sim_sampled, arith_mean = T, use_filter = F, npass = 2)
 
 pdf("/users/myles/dropbox/R scripts/deconv/pdf/typist sim var_e vs rstud or cooks.pdf",
     width = 9.5, height = 4.5)
@@ -281,7 +281,7 @@ plot(sim_sampled, sim_noise, log = "xy", las = 1,
 mk0 <- updateMarkers(mk0, nsubclass = 200)
 
 fit2 <- deconvolute(mk0, sim_noise,
-                    arith_mean = T, use_filter = F, cores = 8,
+                    arith_mean = T, use_filter = F,
                     npass = 1, outlier_method = "rstud",
                     outlier_cutoff = 2.5)
 
@@ -340,10 +340,10 @@ mk <- updateMarkers(mk, bulkdata = PEAC.blood, nsubclass = 500,
                     expfilter = 0.2)
 
 # plot residuals & heteroscedasticity
-fit <- deconvolute(mk, PEAC.blood, cores = 8, npass = 1)
-fit2 <- deconvolute(mk, PEAC.blood, cores = 8, npass = 2)
-fit3 <- deconvolute(mk, PEAC.blood, cores = 8, npass = 3)
-fit5 <- deconvolute(mk, PEAC.blood, cores = 8, npass = 5)
+fit <- deconvolute(mk, PEAC.blood, npass = 1)
+fit2 <- deconvolute(mk, PEAC.blood, npass = 2)
+fit3 <- deconvolute(mk, PEAC.blood, npass = 3)
+fit5 <- deconvolute(mk, PEAC.blood, npass = 5)
 
 pdf("/users/myles/dropbox/R scripts/deconv/pdf/typist sim resid.pdf",
     width = 10, height = 3)

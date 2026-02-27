@@ -476,6 +476,27 @@ all(colnames(sim_percentNN) == colnames(music_percentNN))
 plot_setv2(sim_percentNN, music_percentNN,
            show_identity = TRUE, show_zero = TRUE,mfrow = c(2,6))
 
+#alternative
+cellgeo_percent_neuron <- cellgeo_percent[ , grepl("Human", colnames(cellgeo_percent))]
+
+#all(colnames(sim_percent) == colnames(cellgeo_percent_neuron))
+#TRUE
+
+plot_pred(sim_percent, as.matrix(cellgeo_percent_neuron), mk) + labs(x = "Observed (%)", y = "Predicted (%)")
+
+plot_pred(sim_percent, as.matrix(music_percent), mk, ellipse = 2) + labs(x = "Observed (%)", y = "Predicted (%)")
+
+cellgeo_percent_NN <- cellgeo_percent[ , !grepl("Human", colnames(cellgeo_percent))]
+
+#all(colnames(sim_percentNN) == colnames(cellgeo_percent_NN))
+#TRUE
+
+plot_pred(sim_percentNN, as.matrix(cellgeo_percent_NN), 
+          mk, scheme = col_scheme_NN) + labs(x = "Observed (%)", y = "Predicted (%)")
+
+plot_pred(sim_percentNN, as.matrix(music_percentNN), 
+          mk, scheme = col_scheme_NN, ellipse = 2) + labs(x = "Observed (%)", y = "Predicted (%)")
+
 ####obtain signatures for heatmap####
 
 ht <- signature_heatmap(mk, scale = "sphere", top = 5, text = FALSE, use_raster = TRUE,

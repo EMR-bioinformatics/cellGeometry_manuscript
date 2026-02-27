@@ -32,8 +32,8 @@ metric_mean <- metric_percent %>% group_by(Cluster, Method) %>%
             N = n(),
             RMSE_SD = sd(RMSE),
             Rsq_SD = sd(Rsq),
-            RMSE_SEM = RMSE_SD/N,
-            Rsq_SEM = Rsq_SD/N)
+            RMSE_SEM = RMSE_SD/sqrt(N),
+            Rsq_SEM = Rsq_SD/sqrt(N))
 
 
 metric_mean$cs_max <- cs_df$Max[match(metric_mean$Cluster,

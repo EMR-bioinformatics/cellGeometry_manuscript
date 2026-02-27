@@ -124,7 +124,7 @@ mkm <- updateMarkers(mkm, expfilter = 0.2, nsubclass = 20)
 fitm <- deconvolute(mkm, sim_sampled_merge,
                     weight_method = "equal",
                     arith_mean = T,
-                    use_filter = F, cores = 8)
+                    use_filter = F)
 
 mset <- metric_set(sim_percent_merge, fitm$subclass$percent)
 summary(mset)
@@ -160,7 +160,7 @@ noise_check <- function(noiseFUN, noise_set, reps = 3) {
     out <- vapply(1:reps, function(j) {
       sim_noise <- do.call(noiseFUN, list(counts = sim_sampled_merge, sd = noi))
       fit <- deconvolute(mkm, sim_noise,
-                         arith_mean = T, use_filter = F, comp_amount = 1, cores = 16)
+                         arith_mean = T, use_filter = F, comp_amount = 1)
       err <- fit$subclass$output - sim_counts_merge
       rmse <- sqrt(colMeans(err^2))
       vapply(1:6, function(i) {
