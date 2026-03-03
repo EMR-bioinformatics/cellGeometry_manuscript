@@ -20,6 +20,7 @@ This repository contains scripts for the cellGeometry manuscript
 │   │   ├── Brain_dirichlet_plot.R
 │   │   ├── Brain_dirichlet.R
 │   │   ├── Brain_NMF.R
+│   │   ├── CCC.R
 │   │   ├── celltypist_dirichlet_plot.R
 │   │   ├── celltypist_dirichlet.R
 │   │   ├── celltypist_NMF.R
