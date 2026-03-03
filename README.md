@@ -35,6 +35,9 @@ This repository contains scripts for the cellGeometry manuscript
 │   │   ├── Tabula_cs.R
 │   │   ├── Tabula_dirichlet_plot.R
 │   │   ├── Tabula_dirichlet.R
+│   │   ├── Tabula_DWLS_subset_deconv.R
+│   │   ├── Tabula_DWLS_subset.R
+│   │   ├── Tabula_DWLS_subset_sig.R
 │   │   ├── Tabula_NMF.R
 │   │   ├── Tabula_similarity.R
 │   │   ├── zero_fraction_plot.R
