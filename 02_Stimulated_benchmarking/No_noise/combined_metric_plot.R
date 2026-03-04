@@ -2,7 +2,8 @@
 
 # summarise metric plots
 
-metric_percent <- readRDS("brain_metric_percent.rds")
+metric_percent <- readRDS("brain_metric_percent_all.rds")
+metric_percent$Data <- "Human Brain\nCell Atlas"
 
 typist <- readRDS("../Cell_typist/workstation2/Dirichlet/typist_metric_percent.rds")
 typist$Data <- "Cell typist"
@@ -11,46 +12,29 @@ AMP <- readRDS("../AMP/Dirichlet/AMP_metric_percent_withexp.rds")
 AMP$Data <- "AMP"
 
 tabula <- readRDS("../Tabula/workstation2/tabula_metric_percent.rds")
+tabula$Data <- "Tabula Sapiens"
 
-#only three reps for neuron
-metric_percent_neuron <- metric_percent[metric_percent$Rep %in% c(1:3), ]
-metric_percent_neuron <- metric_percent_neuron[grepl("Human", metric_percent_neuron$Cluster), ]
-metric_percent_neuron$Data <- "Brain \n(neurons)"
+metric_all <- rbind(AMP,
+                    typist, 
+                    tabula,
+                    metric_percent[metric_percent$Method != "LinDeconSeq", ]) #as only NN
 
-# metric_all <- rbind(AMP, 
-#                     typist,
-#                     tabula,
-#                     metric_percent_neuron)
-# 
-# metric_all$Data <- factor(metric_all$Data,
-#                           levels = c("AMP", "Cell typist", "Tabula", "Brain \n(neurons)"))
-# 
-# metric_all$Method <- factor(metric_all$Method, levels = c("CellGeometry", "MuSiC", "DWLS", "LinDeconSeq"))
-
-metric_allv2 <- rbind(AMP,
-                      typist, 
-                      tabula,
-                      metric_percent[metric_percent$Rep %in% c(1:3),])
-
-metric_allv2$Data[metric_allv2$Data == "Brain"] <- "Human Brain\nCell Atlas"
-metric_allv2$Data[metric_allv2$Data == "Tabula"] <- "Tabula Sapiens"
-
-metric_allv2$Data <- factor(metric_allv2$Data,
+metric_all$Data <- factor(metric_all$Data,
                             levels = c("AMP", "Cell typist", "Tabula Sapiens", "Human Brain\nCell Atlas"))
 
-metric_allv2$Data_info <- NA
-metric_allv2$Data_info[metric_allv2$Data == "AMP" & 
-                         metric_allv2$Method == "CellGeometry" &
-                         metric_allv2$Cluster == "SC-F1" & metric_allv2$Rep == 1] <- "Synovium\n10,099 cells"
-metric_allv2$Data_info[metric_allv2$Data == "Cell typist" & 
-                         metric_allv2$Method == "CellGeometry" &
-                         metric_allv2$Cluster == "DC" & metric_allv2$Rep == 1] <- "Blood\n27,620 cells"
-metric_allv2$Data_info[metric_allv2$Data == "Tabula Sapiens" & 
-                         metric_allv2$Method == "CellGeometry" &
-                         metric_allv2$Cluster == "fibroblast" & metric_allv2$Rep == 1] <- "75 tissues\n1,136,218 cells"
-metric_allv2$Data_info[metric_allv2$Data == "Human Brain\nCell Atlas" & 
-                         metric_allv2$Method == "CellGeometry" &
-                         metric_allv2$Cluster == "fibroblast" & metric_allv2$Rep == 1] <- "Brain\n3,369,219 cells"
+metric_all$Data_info <- NA
+metric_all$Data_info[metric_all$Data == "AMP" & 
+                         metric_all$Method == "CellGeometry" &
+                         metric_all$Cluster == "SC-F1" & metric_all$Rep == 1] <- "Synovium\n10,099 cells"
+metric_all$Data_info[metric_all$Data == "Cell typist" & 
+                         metric_all$Method == "CellGeometry" &
+                         metric_all$Cluster == "DC" & metric_all$Rep == 1] <- "Blood\n27,620 cells"
+metric_all$Data_info[metric_all$Data == "Tabula Sapiens" & 
+                         metric_all$Method == "CellGeometry" &
+                         metric_all$Cluster == "fibroblast" & metric_all$Rep == 1] <- "75 tissues\n1,136,218 cells"
+metric_all$Data_info[metric_all$Data == "Human Brain\nCell Atlas" & 
+                         metric_all$Method == "CellGeometry" &
+                         metric_all$Cluster == "fibroblast" & metric_all$Rep == 1] <- "Brain\n3,369,219 cells"
 
 library(ggplot2)
 library(ggh4x)
@@ -68,7 +52,7 @@ filter_lims <- function(x){
 
 library(dplyr)
 
-metric_allv2 <- metric_allv2 %>% group_by(Method, Data) %>%
+metric_all <- metric_all %>% group_by(Method, Data) %>%
   mutate(RMSEv2 = filter_lims(RMSE),
          Rsqv2 = filter_lims(Rsq))
 
@@ -89,20 +73,20 @@ calc_boxplot_stat <- function(x) {
   return(stats)
 }
 
-metric_allv2$RMSEv3 <- NA
-metric_allv2$RMSEv3[metric_allv2$Data == "AMP" & metric_allv2$RMSE < 6] <- metric_allv2$RMSE[metric_allv2$Data == "AMP" & metric_allv2$RMSE < 6] 
-metric_allv2$RMSEv3[metric_allv2$Data == "Cell typist" & metric_allv2$RMSE < 7] <- metric_allv2$RMSE[metric_allv2$Data == "Cell typist" & metric_allv2$RMSE < 7]
-metric_allv2$RMSEv3[metric_allv2$Data == "Tabula Sapiens" & metric_allv2$RMSE < 1.14 ] <- metric_allv2$RMSE[metric_allv2$Data == "Tabula Sapiens" & metric_allv2$RMSE < 1.14]
-metric_allv2$RMSEv3[metric_allv2$Data == "Human Brain\nCell Atlas" & metric_allv2$RMSE < 1.8 ] <- metric_allv2$RMSE[metric_allv2$Data == "Human Brain\nCell Atlas" & metric_allv2$RMSE < 1.8]
+metric_all$RMSEv3 <- NA
+metric_all$RMSEv3[metric_all$Data == "AMP" & metric_all$RMSE < 6] <- metric_all$RMSE[metric_all$Data == "AMP" & metric_all$RMSE < 6] 
+metric_all$RMSEv3[metric_all$Data == "Cell typist" & metric_all$RMSE < 7] <- metric_all$RMSE[metric_all$Data == "Cell typist" & metric_all$RMSE < 7]
+metric_all$RMSEv3[metric_all$Data == "Tabula Sapiens" & metric_all$RMSE < 1.14 ] <- metric_all$RMSE[metric_all$Data == "Tabula Sapiens" & metric_all$RMSE < 1.14]
+metric_all$RMSEv3[metric_all$Data == "Human Brain\nCell Atlas" & metric_all$RMSE < 1.9 ] <- metric_all$RMSE[metric_all$Data == "Human Brain\nCell Atlas" & metric_all$RMSE < 1.9]
 
-metric_allv2$Method <- factor(metric_allv2$Method,
+metric_all$Method <- factor(metric_all$Method,
                               levels = c("CellGeometry",
                                          "MuSiC",
                                          "DWLS",
                                          "LinDeconSeq"))
 
-ggplot(data = metric_allv2) +
-  geom_jitter(aes(x = Method, y = RMSEv3, color = Method), alpha = 0.2, 
+ggplot(data = metric_all) +
+  geom_jitter(aes(x = Method, y = RMSEv3, color = Method), alpha = 0.2,
               width = 0.2)+
   stat_summary(aes(x = Method, y = RMSE), 
                alpha = 0.5,
@@ -125,15 +109,14 @@ ggplot(data = metric_allv2) +
         strip.background = element_blank(),
         panel.spacing.x = unit(1.5, "cm"))
 
+metric_all$Rsqv3 <- NA
+metric_all$Rsqv3[metric_all$Data == "AMP" & metric_all$Rsq > -2.2] <- metric_all$Rsq[metric_all$Data == "AMP" & metric_all$Rsq > -2.2] 
+metric_all$Rsqv3[metric_all$Data == "Cell typist" & metric_all$Rsq > -5.9] <- metric_all$Rsq[metric_all$Data == "Cell typist" & metric_all$Rsq > -5.9] 
+metric_all$Rsqv3[metric_all$Data == "Tabula Sapiens" & metric_all$Rsq > -6.2] <- metric_all$Rsq[metric_all$Data == "Tabula Sapiens" & metric_all$Rsq > -6.2] 
+metric_all$Rsqv3[metric_all$Data == "Human Brain\nCell Atlas" & metric_all$Rsq > -11.1] <- metric_all$Rsq[metric_all$Data == "Human Brain\nCell Atlas" & metric_all$Rsq > -11.1] 
 
-metric_allv2$Rsqv3 <- NA
-metric_allv2$Rsqv3[metric_allv2$Data == "AMP" & metric_allv2$Rsq > -2.2] <- metric_allv2$Rsq[metric_allv2$Data == "AMP" & metric_allv2$Rsq > -2.2] 
-metric_allv2$Rsqv3[metric_allv2$Data == "Cell typist" & metric_allv2$Rsq > -5.9] <- metric_allv2$Rsq[metric_allv2$Data == "Cell typist" & metric_allv2$Rsq > -5.9] 
-metric_allv2$Rsqv3[metric_allv2$Data == "Tabula Sapiens" & metric_allv2$Rsq > -6.2] <- metric_allv2$Rsq[metric_allv2$Data == "Tabula Sapiens" & metric_allv2$Rsq > -6.2] 
-metric_allv2$Rsqv3[metric_allv2$Data == "Human Brain\nCell Atlas" & metric_allv2$Rsq > -8.85] <- metric_allv2$Rsq[metric_allv2$Data == "Human Brain\nCell Atlas" & metric_allv2$Rsq > -8.85] 
-
-ggplot(data = metric_allv2) +
-  geom_jitter(aes(x = Method, y = Rsqv3, color = Method), alpha = 0.2, 
+ggplot(data = metric_all) +
+  geom_jitter(aes(x = Method, y = Rsqv3, color = Method), alpha = 0.2,
               width = 0.2)+
   stat_summary(aes(x = Method, y = Rsq), 
                alpha = 0.5,
@@ -156,4 +139,6 @@ ggplot(data = metric_allv2) +
         strip.text = element_blank(),
         strip.background = element_blank(),
         panel.spacing.x = unit(1.5, "cm"))
+
+
 
