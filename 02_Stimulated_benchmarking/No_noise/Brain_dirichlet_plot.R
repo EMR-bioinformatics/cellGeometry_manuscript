@@ -356,8 +356,11 @@ cellgeo_percent_neuron <- cellgeo_percent[ , grepl("Human", colnames(cellgeo_per
 #all(colnames(sim_percent) == colnames(cellgeo_percent_neuron))
 #TRUE
 
-plot_pred(sim_percent, as.matrix(cellgeo_percent_neuron), mk) + labs(x = "Observed (%)", y = "Predicted (%)")
-#500x500
+P1 <- plot_pred(sim_percent, as.matrix(cellgeo_percent_neuron), mk) + 
+  labs(x = "Observed (%)", y = "Predicted (%)") +
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        plot.title = element_text(size = 14))
 
 prop_arrange <- function(df){
   common <- intersect(colnames(sim_percent), colnames(df))
@@ -382,7 +385,11 @@ music_percent <- prop_arrange(music2$`Times 1`$`Rep 1`$output$Est.prop.weighted 
 all(colnames(sim_percent) == colnames(music_percent))
 #TRUE
 
-plot_pred(sim_percent, as.matrix(music_percent), mk, ellipse = 2) + labs(x = "Observed (%)", y = "Predicted (%)")
+P2 <- plot_pred(sim_percent, as.matrix(music_percent), mk, ellipse = 2) + 
+  labs(x = "Observed (%)", y = "Predicted (%)")+
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        plot.title = element_text(size = 14))
 
 DWLS_percent <- t(DWLS$`Times 1`$`Rep 1`$output) * 100
 colnames(DWLS_percent) <- celltype$Orig[match(colnames(DWLS_percent),
@@ -392,8 +399,99 @@ DWLS_percent <- DWLS_percent[ , colnames(sim_percent)]
 all(colnames(sim_percent) == colnames(DWLS_percent))
 #TRUE
 
-plot_pred(sim_percent, as.matrix(DWLS_percent), mk, ellipse = 2) + labs(x = "Observed (%)", y = "Predicted (%)")
-#550x550
+P3 <- plot_pred(sim_percent, as.matrix(DWLS_percent), mk, ellipse = 2) + 
+  labs(x = "Observed (%)", y = "Predicted (%)") +
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        plot.title = element_text(size = 14))
+
+library(ggpubr)
+ggarrange(P1, P2, P3, ncol = 2, nrow = 2, align = "hv")
+
+#####non-neuronal#####
+
+library(paletteer)
+
+col_scheme_NN <- c("fibroblast" = "palegreen",
+                   "endothelial cell" = "sienna1",
+                   "vascular associated smooth muscle cell" = "sienna3",
+                   "pericyte" = "sienna4",
+                   "choroid plexus epithelial cell" = "grey50",
+                   "astrocyte" = paletteer_d("ggsci::purple_material")[3], 
+                   "oligodendrocyte precursor cell" = paletteer_d("ggsci::purple_material")[4],
+                   "oligodendrocyte" = paletteer_d("ggsci::purple_material")[5],
+                   "ependymal cell" = paletteer_d("ggsci::purple_material")[6],
+                   "Bergmann glial cell" = paletteer_d("ggsci::purple_material")[8],
+                   "central nervous system macrophage" = paletteer_d("ggsci::purple_material")[10])
+
+cellgeo_percent_NN <- cellgeo_percent[ , !grepl("Human", colnames(cellgeo_percent))]
+sim_percentNN <- sim_percent_merge[ , !grepl("Human", colnames(sim_percent_merge))]
+
+#all(colnames(sim_percentNN) == colnames(cellgeo_percent_NN))
+#TRUE
+
+P1NN <- plot_pred(sim_percentNN, as.matrix(cellgeo_percent_NN), 
+                  mk, scheme = col_scheme_NN) + 
+  labs(x = "Observed (%)", y = "Predicted (%)")+
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        plot.title = element_text(size = 14))
+
+prop_arrangev2 <- function(df){
+  common <- intersect(colnames(sim_percentNN), colnames(df))
+  propdf <- df[ , colnames(df) %in% common]
+  
+  missing <- setdiff(colnames(sim_percentNN), colnames(propdf))
+  
+  propdf <- as.data.frame(propdf)
+  
+  if(length(missing) > 0){
+    for(i in missing){
+      propdf[ , i] <- 0
+    }
+  }
+  
+  propdf <- propdf[ , match(colnames(sim_percentNN), colnames(propdf))]
+  propdf
+}
+
+music_percentNN <- prop_arrangev2(music2_NN$`Times 1`$`Rep 1`$output$Est.prop.weighted * 100)
+
+#all(colnames(sim_percentNN) == colnames(music_percentNN))
+#TRUE
+
+P2NN<- plot_pred(sim_percentNN, as.matrix(music_percentNN), 
+                 mk, scheme = col_scheme_NN, ellipse = 2) + 
+  labs(x = "Observed (%)", y = "Predicted (%)")+
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        plot.title = element_text(size = 14))
+
+DWLS_percentNN <- as.data.frame(t(DWLS_NN$`Times 1`$`Rep 1`$output * 100))
+colnames(DWLS_percentNN) <- gsub("_", " ", colnames(DWLS_percentNN))
+DWLS_percentNN <- DWLS_percentNN[ , match(colnames(sim_percentNN), colnames(DWLS_percentNN))]
+
+P3NN <- plot_pred(sim_percentNN, as.matrix(DWLS_percentNN), mk, scheme = col_scheme_NN,
+                  ellipse = 2) + 
+  labs(x = "Observed (%)", y = "Predicted (%)")+
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        plot.title = element_text(size = 14))
+
+Lin_percentNN <- as.data.frame(Lin_NN$`Times 1`$`Rep 1`$output * 100)
+colnames(Lin_percentNN) <- gsub("_", " ", colnames(Lin_percentNN))
+Lin_percentNN <- Lin_percentNN[ , match(colnames(sim_percentNN), colnames(Lin_percentNN))]
+
+P4NN <- plot_pred(sim_percentNN, as.matrix(Lin_percentNN), mk, scheme = col_scheme_NN,
+                  ellipse = 2) + 
+  labs(x = "Observed (%)", y = "Predicted (%)")+
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        plot.title = element_text(size = 14))
+
+ggarrange(P1NN, P2NN, P3NN, P4NN,
+          ncol = 2, nrow = 2, 
+          align = "hv")
 
 ####obtain signatures for heatmap####
 
