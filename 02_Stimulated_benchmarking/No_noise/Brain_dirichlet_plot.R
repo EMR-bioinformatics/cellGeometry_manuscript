@@ -236,31 +236,66 @@ ggarrange(Pv2,P2v2, ncol = 1, nrow = 2,
 # shared y axis
 
 # RMSE
-library(ggbreak)
+# library(ggbreak)
+# 
+# ggplot(data = metric_percent_NN) +
+#   geom_jitter(aes(x = Celltype, y = RMSE, group = Celltype, color = Method),
+#               alpha = 0.8, 
+#               width = 0.2)+
+#   geom_boxplot(aes(x = Celltype, y = RMSE), 
+#                alpha = 0.5,
+#                outlier.shape = NA) + 
+#   scale_color_manual(values = c("CellGeometry" = "#F8766D",
+#                                 "MuSiC" = "#00BF7D",
+#                                 "LinDeconSeq" = "#00B0F6",
+#                                 "DWLS" = "#E76BF3"),
+#                      guide = "none") +
+#   labs(x = "", y = "RMSE") +
+#   scale_y_break(c(40, 40), ticklabels = c(40, 60), scale = 0.2) +
+#   facet_wrap(~Method, ncol = 4)+
+#   theme_classic()+
+#   theme(axis.text = element_text(size = 11, color = "black"),
+#         axis.text.x = element_text(angle = 45, hjust = 1),
+#         axis.title = element_text(size = 11),
+#         axis.title.y = element_text(hjust = 0.65),
+#         strip.background = element_blank(),
+#         strip.text = element_text(size = 11))
 
-ggplot(data = metric_percent_NN) +
-  geom_jitter(aes(x = Celltype, y = RMSE, group = Celltype, color = Method),
-              alpha = 0.8, 
-              width = 0.2)+
-  geom_boxplot(aes(x = Celltype, y = RMSE), 
-               alpha = 0.5,
-               outlier.shape = NA) + 
-  scale_color_manual(values = c("CellGeometry" = "#F8766D",
-                                "MuSiC" = "#00BF7D",
-                                "LinDeconSeq" = "#00B0F6",
-                                "DWLS" = "#E76BF3"),
-                     guide = "none") +
-  labs(x = "", y = "RMSE") +
-  scale_y_break(c(40, 40), ticklabels = c(40, 60), scale = 0.2) +
-  facet_wrap(~Method, ncol = 4)+
-  theme_classic()+
-  theme(axis.text = element_text(size = 11, color = "black"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title = element_text(size = 11),
-        axis.title.y = element_text(hjust = 0.65),
-        strip.background = element_blank(),
-        strip.text = element_text(size = 11))
-#800x350
+# barplot style
+
+metric_percent_NN_mean <- metric_percent_NN %>%
+  group_by(Method, Celltype) %>%
+  summarise(Mean = mean(RMSE),
+            SEM = sd(RMSE)/sqrt(n()))
+
+RMSE_plot <- function(df, method){
+  sub <- df[df$Method == method, ]
+  
+  ggplot(data = sub) +
+    geom_errorbar(aes(x = Celltype, y = Mean, ymax = Mean + SEM, ymin = Mean - SEM),
+                  width = 0.2, color = "black") +
+    geom_col(aes(x = Celltype, y = Mean, fill = Method), width = 0.8) +
+    scale_fill_manual(values = c("CellGeometry" = "#F8766D",
+                                 "MuSiC" = "#00BF7D",
+                                 "LinDeconSeq" = "#00B0F6",
+                                 "DWLS" = "#E76BF3"),
+                      drop = FALSE,
+                      guide = "none") +
+    labs(x = "", y = "RMSE", title = method) +
+    ylim(c(0, max(df$Mean + df$SEM))) +
+    theme_classic()+
+    theme(axis.text = element_text(size = 11, color = "black"),
+          axis.text.x = element_text(angle = 45, hjust = 1, size = 9.5),
+          axis.title = element_text(size = 11),
+          plot.margin = margin(0.2, 0.2, 0.2, 0.8, unit = "cm"), 
+          plot.title = element_text(size = 11, hjust = 0.5))
+}
+
+NN_RMSE <- lapply(levels(metric_percent_NN_mean$Method), function(x){
+  RMSE_plot(metric_percent_NN_mean, x)
+})
+
+ggarrange(plotlist = NN_RMSE, ncol = 4)
 
 ####neuron metric####
 
@@ -323,27 +358,39 @@ ggarrange(P3v2,P4v2, ncol = 1, nrow = 2,
 
 # RMSE
 
-ggplot(data = metric_percent_neuron) +
-  geom_jitter(aes(x = Celltype, y = RMSE, group = Celltype, color = Method),
-              alpha = 0.8, 
-              width = 0.2)+
-  geom_boxplot(aes(x = Celltype, y = RMSE), 
-               alpha = 0.5,
-               outlier.shape = NA) + 
-  scale_color_manual(values = c("CellGeometry" = "#F8766D",
-                                "MuSiC" = "#00BF7D",
-                                "DWLS" = "#E76BF3"),
-                     guide = "none") +
-  labs(x = "", y = "RMSE") +
-  facet_wrap(~Method, ncol = 3)+
-  theme_classic()+
-  theme(axis.text = element_text(size = 11, color = "black"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title = element_text(size = 11),
-        plot.margin = margin(0.2, 0.2, 0.2, 1.4, unit = "cm"),
-        strip.background = element_blank(),
-        strip.text = element_text(size = 11))
-#800x350
+# ggplot(data = metric_percent_neuron) +
+#   geom_jitter(aes(x = Celltype, y = RMSE, group = Celltype, color = Method),
+#               alpha = 0.8, 
+#               width = 0.2)+
+#   geom_boxplot(aes(x = Celltype, y = RMSE), 
+#                alpha = 0.5,
+#                outlier.shape = NA) + 
+#   scale_color_manual(values = c("CellGeometry" = "#F8766D",
+#                                 "MuSiC" = "#00BF7D",
+#                                 "DWLS" = "#E76BF3"),
+#                      guide = "none") +
+#   labs(x = "", y = "RMSE") +
+#   facet_wrap(~Method, ncol = 3)+
+#   theme_classic()+
+#   theme(axis.text = element_text(size = 11, color = "black"),
+#         axis.text.x = element_text(angle = 45, hjust = 1),
+#         axis.title = element_text(size = 11),
+#         plot.margin = margin(0.2, 0.2, 0.2, 1.4, unit = "cm"),
+#         strip.background = element_blank(),
+#         strip.text = element_text(size = 11))
+
+# barplot style
+
+metric_percent_neuron_mean <- metric_percent_neuron %>%
+  group_by(Method, Celltype) %>%
+  summarise(Mean = mean(RMSE),
+            SEM = sd(RMSE)/sqrt(n()))
+
+neuron_RMSE <- lapply(unique(metric_percent_neuron_mean$Method), function(x){
+  RMSE_plot(metric_percent_neuron_mean, x)
+})
+
+ggarrange(plotlist = neuron_RMSE, ncol = 3)
 
 ####scatter plots####
 
