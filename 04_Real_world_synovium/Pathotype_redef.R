@@ -34,8 +34,8 @@ BM_plot <- function(param, cohort, legend = FALSE){
       xlab("B cell") +
       ylab("Macrophage") +
       #ggtitle(cohort)+
-      geom_vline(xintercept = 30, linetype = "dotted") +
-      geom_hline(yintercept = 300, linetype = "dotted") +
+      geom_vline(xintercept = 25, linetype = "dotted") +
+      geom_hline(yintercept = 388, linetype = "dotted") +
       theme_classic() +
       theme(axis.text = element_text(color = "black", size = 8), #was 11
             axis.title = element_text(size = 10), #was 11
@@ -51,8 +51,8 @@ BM_plot <- function(param, cohort, legend = FALSE){
       xlab("B cell") +
       ylab("Macrophage") +
       #ggtitle(cohort)+
-      geom_vline(xintercept = 30, linetype = "dotted") +
-      geom_hline(yintercept = 300, linetype = "dotted") +
+      geom_vline(xintercept = 25, linetype = "dotted") +
+      geom_hline(yintercept = 388, linetype = "dotted") +
       theme_classic() +
       theme(axis.text = element_text(color = "black", size = 8), #was 12
             axis.title = element_text( size = 10), #was 11
