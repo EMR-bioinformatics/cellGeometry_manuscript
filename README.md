@@ -1,8 +1,12 @@
-# cellGeometry\_manuscript
+# cellGeometry manuscript
 
 This repository contains scripts for the cellGeometry manuscript
 
+cellGeometry package is available on [CRAN](https://CRAN.R-project.org/package=cellGeometry). 
 
+A [vignette](https://cran.r-project.org/web/packages/cellGeometry/vignettes/intro.html) has been provided with instructions for installation of the package and necessary dependencies as well as basic analysis of the Cell Typist dataset via creation of a simulated pseudo-bulk dataset. 
+
+Another [vignette](https://cran.r-project.org/web/packages/cellGeometry/vignettes/brain_atlas.html) also provides detailed instructions for merging simulated pseudo-bulk from 2 brain atlas snRNA-Seq data files and walks users through analysis of this dataset. 
 
 ## Repository Structure
 
