@@ -78,6 +78,14 @@ sqrt_noise$Noise <- gsub("SD = ", "", sqrt_noise$Noise)
 comb_all_noise <- rbind(comb_all_noise,
                         sqrt_noise)
 
+#remove previous Gaussian noise and replace with updated Gaussian noise
+
+comb_all_noise <- comb_all_noise[comb_all_noise$Type != "Gaussian noise", ]
+add_noise_results <- readRDS("add_noise_results.rds")
+
+comb_all_noise <- rbind(comb_all_noise,
+                        add_noise_results)
+
 npass <- readRDS("cellgeo_shift_npass_var2point5.rds")
 
 npass_df <- percent_retrieve(npass)
@@ -102,7 +110,7 @@ comb_meandf <- comb_all_noise %>%
   summarise(Mean = mean(RMSE),
             SD = sd(RMSE),
             N = n(),
-            SEM = Mean/sqrt(N))
+            SEM = SD/sqrt(N))
 
 library(ggplot2)
 library(ggnewscale)
@@ -116,7 +124,7 @@ metric_plot <- function(df, metric, lim){
     summarise(Mean = mean(Metric),
               SD = sd(Metric),
               N = n(),
-              SEM = Mean/sqrt(N))
+              SEM = SD/sqrt(N))
   
   ggplot() +
     geom_smooth(data = df, se = FALSE,
@@ -184,10 +192,10 @@ metric_plot <- function(df, metric, lim){
 
 library(ggpubr)
 
-pdf("RMSE_allv2_npassv2_correct.pdf", width = 12.5, height = 3, onefile=FALSE)
+pdf("RMSE_allv3_add.pdf", width = 12.5, height = 3, onefile=FALSE)
 ggarrange(metric_plot(comb_all_noise[comb_all_noise$Type == "Gaussian noise" &
-                                       comb_all_noise$Noise %in% c(0, 100, 200,
-                                                                   300, 400, 500), ],
+                                       comb_all_noise$Noise %in% c(0, 1000, 2000,
+                                                                   3000, 4000, 5000), ],
                       "RMSE", c(0.5, 7)) + ggtitle("Gaussian noise") ,
           metric_plot(comb_all_noise[comb_all_noise$Type == "Log noise", ],
                       "RMSE", c(0.5, 7)) + ggtitle("log noise"),
@@ -200,19 +208,19 @@ ggarrange(metric_plot(comb_all_noise[comb_all_noise$Type == "Gaussian noise" &
           ncol = 4, common.legend = TRUE, legend = "right")
 dev.off()
 
-pdf("Rsq_allv2_npassv2_correct.pdf", width = 12.5, height = 3, onefile=FALSE)
+pdf("Rsq_allv3_add.pdf", width = 12.5, height = 3, onefile=FALSE)
 ggarrange(metric_plot(comb_all_noise[comb_all_noise$Type == "Gaussian noise" &
-                                       comb_all_noise$Noise %in% c(0, 100, 200,
-                                                                   300, 400, 500), ],
-                      "Rsq", c(-8, 1)) + ggtitle("Gaussian noise"),
+                                       comb_all_noise$Noise %in% c(0, 1000, 2000,
+                                                                   3000, 4000, 5000), ],
+                      "Rsq", c(-11, 1)) + ggtitle("Gaussian noise"),
           metric_plot(comb_all_noise[comb_all_noise$Type == "Log noise", ],
-                      "Rsq", c(-8, 1)) + ggtitle("Log noise"),
+                      "Rsq", c(-11, 1)) + ggtitle("Log noise"),
           metric_plot(comb_all_noise[comb_all_noise$Type == "Sqrt noise" &
                                        comb_all_noise$Noise %in% c(0, 10, 25, 
                                                                    50, 75, 100), ],
-                      "Rsq", c(-8, 1)) + ggtitle("Sqrt noise"),
+                      "Rsq", c(-11, 1)) + ggtitle("Sqrt noise"),
           metric_plot(comb_all_noise[comb_all_noise$Type == "Shift noise", ],
-                      "Rsq", c(-8, 1)) + ggtitle("Shift noise"),
+                      "Rsq", c(-11, 1)) + ggtitle("Shift noise"),
           ncol = 4, common.legend = TRUE, legend = "right")
 dev.off()
 
@@ -256,13 +264,13 @@ ggarrange(noise_plot(orig, noise_all$add$`Rep 1`, "Gaussian noise"),
           ncol = 4)
 dev.off()
 
-pdf("add_noise_SD_logv2_correct.pdf", 
-width = 12.5, height = 2.5)
-ggarrange(noise_plot(orig, noise_all$add$`Rep 1`, "SD = 100"),
-          noise_plot(orig, add_all$`SD = 250`$`Rep 1`, "SD = 200"),
-          noise_plot(orig, add_all$`SD = 500`$`Rep 1`, "SD = 300"),
-          noise_plot(orig, add_all$`SD = 750`$`Rep 1`, "SD = 400"),
-          noise_plot(orig, add_all$`SD = 1000`$`Rep 1`, "SD = 500"),
+pdf("add_noise_SD_update.pdf",
+    width = 12.5, height = 2.5)
+ggarrange(noise_plot(orig, add_all$`SD = 1000`$`Rep 1`, "SD = 1000"),
+          noise_plot(orig, add_all$`SD = 2000`$`Rep 1`, "SD = 2000"),
+          noise_plot(orig, add_all$`SD = 3000`$`Rep 1`, "SD = 3000"),
+          noise_plot(orig, add_all$`SD = 4000`$`Rep 1`, "SD = 4000"),
+          noise_plot(orig, add_all$`SD = 5000`$`Rep 1`, "SD = 5000"),
           ncol = 5)
 dev.off()
 

@@ -22,9 +22,14 @@ Another [vignette](https://cran.r-project.org/web/packages/cellGeometry/vignette
 │   │   ├── AMP_dirichlet.R
 │   │   ├── AMP_NMF.R
 │   │   ├── AMP_samplesize.R
+│   │   ├── Bisque_brain.R
+│   │   ├── Bisque_tabula.R
 │   │   ├── Brain_dirichlet_plot.R
 │   │   ├── Brain_dirichlet.R
+│   │   ├── Brain_neuron_DWLS.R
 │   │   ├── Brain_NMF.R
+│   │   ├── Brain_NN_DWLS.R
+│   │   ├── Brain_NN_LinDeconSeq.R
 │   │   ├── CCC.R
 │   │   ├── celltypist_dirichlet_plot.R
 │   │   ├── celltypist_dirichlet.R
@@ -32,6 +37,9 @@ Another [vignette](https://cran.r-project.org/web/packages/cellGeometry/vignette
 │   │   ├── combined_metric_plot.R
 │   │   ├── combined_NMF_metric_plot.R
 │   │   ├── glmnet.R
+│   │   ├── Instaprism_bisque_metrics.R
+│   │   ├── Instaprism_brain.R
+│   │   ├── Instaprism_tabula.R
 │   │   ├── LinDeconSeq_reprex
 │   │   │   ├── Brain_LinDeconSeq.R
 │   │   │   └── Tabula_LinDeconSeq.R
@@ -49,6 +57,7 @@ Another [vignette](https://cran.r-project.org/web/packages/cellGeometry/vignette
 │   │   ├── zero_fraction_plot.R
 │   │   └── zero_fraction.R
 │   └── With_noise
+│       ├── AMP_dirichlet_noise_add_more.R
 │       ├── AMP_dirichlet_noise_lin_Music.R
 │       ├── AMP_dirichlet_noise_plot.R
 │       ├── AMP_dirichlet_noise.R

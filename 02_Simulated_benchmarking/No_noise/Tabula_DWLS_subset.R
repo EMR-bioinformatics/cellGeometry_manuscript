@@ -66,6 +66,7 @@ celltypedf$convert <- unique(as.vector(meta$cell_type))
 #saveRDS(celltypedf, file = "DWLS_celltype_convert.rds")
 
 subcl <- meta$cell_type[ind]
+donor_id <- meta$donor_id[ind]
 mat_sub <- as.matrix(mat[ ,ind])
 
 rm(h5)
@@ -94,5 +95,5 @@ mat_sub <- mat_sub[!rownames(mat_sub) %in% names(rm2), ]
 #dim(mat_sub)
 #46221 15739
 
-# save(mat_sub, subcl, 
+# save(mat_sub, subcl, donor_id,
 #      file = "Tabula_subset.rdata")
